@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        body {
+            background-color: teal;
+        }
+
+        .contenedor-calculadora {
+            background-color: silver;
+            display: flex;
+            flex-direction: column;
+            padding: 3% 1.3em;
+            width: 300px;
+            height: 60vh;
+            border: 2px solid black;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 3px 3px 3px black;
+        }
+
+        .operador {
+            display: flex;
+            justify-content: center;
+            align-items: center
+        }
+
+        .resultado {
+            height: 8vh;
+            width: 90%;
+            border: 2px solid black;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin: 13px auto;
+
+        }
+
+        input[type="text"] {
+            height: 7vh;
+            width: 87%;
+            font-size: 1.8em;
+            padding-right: 23px;
+            box-shadow: 3px 3px 3px inset black;
+            text-align: right;
+            font-family: 'Calculator';
+        }
+
+        .botonera {
+            font-size: 1.8em;
+            background-color: white;
+            border: 2px solid black;
+            height: 44vh;
+            width: 35vh;
+            margin: 0px auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: center;
+            flex-wrap: wrap;
+            grid-gap: 4px;
+            font-family: 'Calculator';
+            padding: 12px 12px;
+        }
+
+        .botonera div:active {
+            transform: scale(0.98);
+        }
+
+        .botonera div {
+            background-color: rgb(54, 81, 214);
+            display: flex;
+            color: white;
+            justify-content: center;
+            align-items: center;
+            width: 8vh;
+            height: 5vh;
+            cursor: pointer;
+            box-shadow: 3px 3px 3px black;
+        }
+
+        .botonera div:hover {
+            background-color: blue;
+            color: white;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="contenedor-calculadora">
+        <div class="resultado">
+            <input id="numero-resultado" type="text" value="0">
+        </div>
+        <div class="botonera">
+            <div class="numeros">7</div>
+            <div class="numeros">8</div>
+            <div class="numeros">9</div>
+            <div class="operador" onclick="suma()">+</div>
+            <div class="numeros">4</div>
+            <div class="numeros">5</div>
+            <div class="numeros">6</div>
+            <div class="operador" onclick="resta()">-</div>
+            <div class="numeros">1</div>
+            <div class="numeros">2</div>
+            <div class="numeros">3</div>
+            <div class="operador" onclick="multiplicacion()">*</div>
+            <div class="operador" onclick="borrar()">CE</div>
+            <div class="numeros">0</div>
+            <div class="operador" onclick="resultado()">=</div>
+            <div class="operador" onclick="divicion()">/</div>
+        </div>
+    </div>
+
+    <script>
+        let valor1, valor2, operador;
+        let limpiarCero = false
+        let igual = false;
+        let numeroPrecionado = false
+
+        /*
+        * Tomamos todos los div con clase numeros con el metodo querySelectorAll que retorna un array.
+        */
+        let numeros = document.querySelectorAll('.numeros')
+        let operadores = document.querySelectorAll('.operador')
+
+        /*
+       * Recorrecomos el array y Asignamos Eventos a los elementos (numeros y operadores)
+       */
+        numeros.forEach(element => {
+            element.addEventListener('click', pantalla)
+        });
+
+        operadores.forEach(element => {
+            element.addEventListener('click', operando)
+        });
+
+
+        /**
+         * Funciona para mostrar los  numeros en la pantalla de la calculadora.
+         **/
+        function pantalla(element) {
+            //Al iniciar validamos si limipiamos el 0 en pantalla o se a preciodado igual para borrar el resultado.
+            if (numeroPrecionado == false || igual == true) {
+                document.querySelector('#numero-resultado').value = ''
+                numeroPrecionado = true
+                igual = false
+                document.querySelector('#numero-resultado').value += element.target.innerHTML
+            } else {
+                document.querySelector('#numero-resultado').value += element.target.innerHTML
+            }
+
+        }
+
+        /**
+        * Funciona capturar el operador requerido (+,-,*,/)
+        **/
+        function operando(element) {
+            operador = element.target.innerHTML
+        }
+
+        /**
+       * Funciona para la suma.
+       **/
+        function suma() {
+            valor1 = document.querySelector('#numero-resultado').value
+            document.querySelector('#numero-resultado').value = ''
+        }
+
+        /**
+       * Funciona para la resta.
+       **/
+        function resta() {
+            valor1 = document.querySelector('#numero-resultado').value
+            document.querySelector('#numero-resultado').value = ''
+        }
+
+
+        /**
+        * Funciona para la multiplicacion.
+        **/
+        function multiplicacion() {
+            valor1 = document.querySelector('#numero-resultado').value
+            document.querySelector('#numero-resultado').value = ''
+        }
+
+        /**
+     * Funciona para la divicion.
+     **/
+        function divicion() {
+            valor1 = document.querySelector('#numero-resultado').value
+            document.querySelector('#numero-resultado').value = ''
+        }
+
+
+        /**
+     * Funciona para la limiar todo.
+     **/
+        function borrar() {
+            document.querySelector('#numero-resultado').value = '0'
+            limpiarCero = false
+            valor1 = ''
+            numeroPrecionado = false
+        }
+
+        /**
+* Funciona para mostrar el resultado.
+**/
+        function resultado() {
+
+
+            igual = true
+
+            //Dependiendo del operador.
+            switch (operador) {
+                case '+':
+                    valor2 = document.querySelector('#numero-resultado').value
+                    document.querySelector('#numero-resultado').value = parseInt(valor1) + parseInt(valor2)
+                    break;
+                case '-':
+                    valor2 = document.querySelector('#numero-resultado').value
+                    document.querySelector('#numero-resultado').value = parseInt(valor1) - parseInt(valor2)
+                    break;
+                case '*':
+                    valor2 = document.querySelector('#numero-resultado').value
+                    document.querySelector('#numero-resultado').value = parseInt(valor1) * parseInt(valor2)
+                    break;
+                case '/':
+                    valor2 = document.querySelector('#numero-resultado').value
+                    document.querySelector('#numero-resultado').value = parseInt(valor1) / parseInt(valor2)
+                    break;
+
+                default:
+                    break;
+            }
+
+
+
+
+
+        }
+    </script>
+</body>
+
+</html>
